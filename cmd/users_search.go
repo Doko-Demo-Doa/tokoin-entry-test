@@ -29,7 +29,7 @@ func check(e error) {
 }
 
 func jsonSearch(key string, value string) {
-	data, err := os.ReadFile("./docs/data/sample.json")
+	data, err := os.ReadFile("./data/sample.json")
 	check(err)
 	val := entities.UserEntityList{}
 	val.UnmarshalJSON(data)
