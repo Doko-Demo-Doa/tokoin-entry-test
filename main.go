@@ -1,7 +1,3 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package main
 
 import (
@@ -21,17 +17,15 @@ var advancedPrompt = &cobraprompt.CobraPrompt{
 	DisableCompletionCommand: true,
 	AddDefaultExitCommand:    true,
 	GoPromptOptions: []prompt.Option{
-		prompt.OptionTitle("cobra-prompt"),
+		prompt.OptionTitle("tokoin-search"),
 		prompt.OptionPrefix(">(^!^)> "),
 		prompt.OptionMaxSuggestion(10),
 	},
-	DynamicSuggestionsFunc: func(annotationValue string, document *prompt.Document) []prompt.Suggest {
-		if suggestions := cmd.GetFoodDynamic(annotationValue); suggestions != nil {
-			return suggestions
-		}
 
+	DynamicSuggestionsFunc: func(annotationValue string, document *prompt.Document) []prompt.Suggest {
 		return []prompt.Suggest{}
 	},
+
 	OnErrorFunc: func(err error) {
 		if strings.Contains(err.Error(), "unknown command") {
 			cmd.RootCmd.PrintErrln(err)
@@ -51,5 +45,5 @@ var simplePrompt = &cobraprompt.CobraPrompt{
 
 func main() {
 	// Change to simplePrompt to see the difference
-	advancedPrompt.Run()
+	simplePrompt.Run()
 }
