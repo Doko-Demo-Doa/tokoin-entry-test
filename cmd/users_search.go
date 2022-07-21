@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"quan/tokoin-test/entities"
 	"strconv"
 
 	"github.com/buger/jsonparser"
@@ -28,20 +29,20 @@ func check(e error) {
 }
 
 func jsonSearch(key string, value string) {
-	data, err := os.ReadFile("./docs/data/users.json")
+	data, err := os.ReadFile("./docs/data/sample.json")
 	check(err)
+	val := entities.UserEntityList{}
+	val.UnmarshalJSON(data)
 
 	jsonparser.ArrayEach(data, func(value []byte, dataType jsonparser.ValueType, offset int, err error) {
-		fmt.Println(jsonparser.Get(value, "url"))
-	}, "_id")
+		val, _, _, _ := jsonparser.Get(value)
 
-	// if er != nil {
-	// 	return
-	// }
-	fmt.Println(string(value), value)
+		v := entities.UserEntity{}
+		v.UnmarshalJSON(val)
+	})
 }
 
-var searchCmd = &cobra.Command{
+var userSearchCmd = &cobra.Command{
 	Use:   "search",
 	Short: "Search for users in json file",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -85,20 +86,15 @@ var searchCmd = &cobra.Command{
 			}
 
 			idPrompt := promptui.Prompt{
-				Label:    "Please enter the id of user you want to search, it must be a number. Use backspace to clear your input.",
+				Label:    "Please enter the id of user you want to search.",
 				Validate: validate,
 			}
 
-			idResult, err := idPrompt.Run()
-
-			if err != nil {
-				fmt.Printf("Prompt failed %v\n", err)
-				return
-			}
+			idResult, _ := idPrompt.Run()
 
 			fmt.Printf("You chose id %q\n", idResult)
 
-			// jsonSearch("", "")
+			jsonSearch("", "")
 			return
 		}
 
@@ -110,5 +106,5 @@ var searchCmd = &cobra.Command{
 }
 
 func init() {
-	RootCmd.AddCommand(searchCmd)
+	RootCmd.AddCommand(userSearchCmd)
 }
